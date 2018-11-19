@@ -36,6 +36,7 @@ router.post("/register", (req, res) => {
     //if user already exists
     if (user) {
       //return 400 status along with json
+
       return res.status(400).json({ email: "Email already exists" });
     } else {
       const avatar = gravatar.url(req.body.email, {
@@ -83,7 +84,8 @@ router.post("/login", (req, res) => {
   //Find user by model
   User.findOne({ email }).then(user => {
     if (!user) {
-      return res.status(404).json({ email: "User not found" });
+      errors.email = "User not found";
+      return res.status(404).json({ errors });
     }
     //Check password
     bcrypt.compare(password, user.password).then(isMatch => {
@@ -110,7 +112,8 @@ router.post("/login", (req, res) => {
           }
         );
       } else {
-        res.status(400).json({ password: "Password incorrect" });
+        errors.password = "Password incorrect";
+        res.status(400).json({ errors });
       }
     });
   });
