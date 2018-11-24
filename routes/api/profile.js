@@ -6,6 +6,10 @@ const passport = require("passport");
 
 //Load Input validation for Profile
 const validateProfileInput = require("../../validation/profile");
+
+//Load Input validation for Profile.experience
+const validateExperienceInput = require("../../validation/experience");
+
 //Load profile
 const Profile = require("../../models/Profile");
 //Load user
@@ -157,5 +161,44 @@ router.post(
       .catch();
   }
 );
+// @route   POST   api/profile/experience
+// @desc    Add / Edit User Experience
+// @access  Private
+router.post(
+  "/experience",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validateExperienceInput(req.body);
 
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    Profile.findOne({ user: req.user.id }) //fetch the user information provided in token
+      .then(profile => {
+        if (!profile) {
+          errors.noprofile = "NO profile found for this user";
+          return res.status(400).json(errors);
+        } else {
+          //Create new experience object with validated form fields
+          const newExp = {
+            title: req.body.title,
+            company: req.body.company,
+            location: req.body.location,
+            from: req.body.from,
+            to: req.body.to,
+            current: req.body.current,
+            description: req.body.description
+          };
+          //Add to experience array
+          profile.experience.unshift(newExp);
+          //Save the profile
+          profile
+            .save()
+            .then(profile => res.json(profile))
+            .catch(err => res.status(400).json(err));
+        }
+      });
+  }
+);
 module.exports = router;
