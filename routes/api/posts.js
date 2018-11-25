@@ -148,6 +148,80 @@ router.post(
   }
 );
 
+// @route   POST   api/posts/:id/comment
+// @desc    Add comment to post route
+// @access  Private
+router.post(
+  "/:id/comment",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validatePostInput(req.body);
+
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    Post.findById(req.params.id)
+      .then(post => {
+        const newComment = {
+          text: req.body.text,
+          name: req.body.name,
+          avatar: req.body.avatar,
+          user: req.user.id
+        };
+        //Add comment to comments
+        post.comments.unshift(newComment);
+        //Save post
+        post.save().then(post => res.json(post));
+      })
+      .catch(err => res.status(404).json({ postnotfound: "No post found" }));
+  }
+);
+
+// @route   DELETE   api/posts/:id/comment/:comment_id
+// @desc    Remove comment from post route
+// @access  Private
+router.delete(
+  "/:id/comment/:comment_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then(post => {
+        //Check if comment exists
+        if (
+          post.comments.filter(
+            comment => comment._id.toString() === req.params.comment_id
+          ).length === 0
+        ) {
+          return res
+            .status(404)
+            .json({ commentnotexist: "Comment does not exists" });
+        }
+        //Check if comment owner is the remover
+        if (
+          post.comments.filter(
+            comment =>
+              comment._id.toString() === req.params.comment_id &&
+              comment.user.toString() === req.user.id
+          ).length === 0
+        ) {
+          return res.status(404).json({
+            commenttodeletenotyours:
+              "Comment does not belong to requesting user"
+          });
+        }
+        //Get the remove index
+        const removeIndex = post.comments
+          .map(comment => comment._id.toString())
+          .indexOf(req.params.comment_id);
+        post.comments.splice(removeIndex, 1);
+        //Save post
+        post.save().then(post => res.json(post));
+      })
+      .catch(err => res.status(404).json({ postnotfound: "No post found" }));
+  }
+);
+
 // @route   Delete   api/posts/:id
 // @desc    Delete Posts route
 // @access  Private
