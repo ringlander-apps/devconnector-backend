@@ -368,15 +368,11 @@ router.delete(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Profile.findOneAndDelete({ user: req.user.id })
-      .then(result =>
-        res.json({ success: true, msg: "Profile deleted for user" })
-      )
-      .catch(err =>
-        res
-          .status(400)
-          .json([{ deleteprofile: "Error occurred deleting profile" }])
-      );
+    Profile.findOneAndRemove({ user: req.user.id }).then(() => {
+      User.findOneAndRemove({ _id: req.user.id }).then(() => {
+        res.json({ success: true, msg: "Profile and User deleted" });
+      });
+    });
   }
 );
 
