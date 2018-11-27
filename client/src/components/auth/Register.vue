@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import Axios from "axios";
+
 export default {
   name: "register",
   data() {
@@ -80,6 +82,12 @@ export default {
         password,
         password2
       };
+
+      Axios.post("api/auth/register", newUser)
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => console.log(err));
     }
   }
 };
