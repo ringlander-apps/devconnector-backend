@@ -4,13 +4,17 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12 text-center">
-            <h1 class="display-3 mb-4">Developer Connector
-            </h1>
-            <p class="lead"> Create a developer profile/portfolio, share posts and get help from other developers</p>
-            <hr />
+            <h1 class="display-3 mb-4">Developer Connector</h1>
+            <p
+              class="lead"
+            >Create a developer profile/portfolio, share posts and get help from other developers</p>
+            <hr>
             <router-link to="/register" class="btn btn-lg btn-info mr-2">Sign up</router-link>
-            <router-link to="/login" class="btn btn-lg btn-light">Login</router-link>
-            
+            <router-link
+              v-if="!this.IS_AUTHENTICATED"
+              to="/login"
+              class="btn btn-lg btn-light"
+            >Login</router-link>
           </div>
         </div>
       </div>
@@ -19,8 +23,12 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+import APIService from "@/services/APIService";
 export default {
-  name: "landing"
+  name: "landing",
+  computed: mapGetters(["USER, IS_AUTHENTICATED"]),
+  methods: {}
 };
 </script>
 
