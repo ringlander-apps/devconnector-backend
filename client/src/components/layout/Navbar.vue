@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
     <div class="container">
       <router-link class="navbar-brand" to="/">DevConnector</router-link>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
@@ -14,22 +14,24 @@
         </ul>
 
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
+          <li v-if="!user" class="nav-item">
             <router-link class="nav-link" to="/register">Sign up</router-link>
           </li>
-          <li class="nav-item">
+          <li v-if="!isAuthenticated" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
-            
           </li>
         </ul>
       </div>
     </div>
   </nav>
-  
 </template>
 
 <script>
-export default {};
+import { mapState, mapActions } from "vuex";
+
+export default {
+  computed: mapState(["isAuthenticated", "user"])
+};
 </script>
 
 <style scoped>
