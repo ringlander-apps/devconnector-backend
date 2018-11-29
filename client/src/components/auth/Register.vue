@@ -1,7 +1,4 @@
 <template>
-  <!-- <div class="container">
-    <h1>Register</h1>
-  </div>-->
   <div class="register">
     <div class="container">
       <div class="row">
@@ -11,50 +8,50 @@
           <form @submit.prevent="processForm">
             <div class="form-group">
               <input
-                v-model="state.name"
+                v-model="formData.name"
                 type="text"
                 v-bind:class="{'is-invalid':isInvalidName}"
                 class="form-control form-control-lg"
                 placeholder="Name"
                 name="name"
               >
-              <div v-if="isInvalidName" class="invalid-feedback">{{this.state.errors.name}}</div>
+              <div v-if="isInvalidName" class="invalid-feedback">{{this.AUTH_ERROR_NAME}}</div>
             </div>
             <div class="form-group">
               <input
-                v-model="state.email"
+                v-model="formData.email"
                 type="email"
                 v-bind:class="{'is-invalid':isInvalidEmail}"
                 class="form-control form-control-lg"
                 placeholder="Email Address"
                 name="email"
               >
-              <div v-if="isInvalidEmail" class="invalid-feedback">{{this.state.errors.email}}</div>
+              <div v-if="isInvalidEmail" class="invalid-feedback">{{this.AUTH_ERROR_EMAIL}}</div>
               <small
                 class="form-text text-muted"
               >This site uses Gravatar so if you want a profile image, use a Gravatar email</small>
             </div>
             <div class="form-group">
               <input
-                v-model="state.password"
+                v-model="formData.password"
                 type="password"
                 v-bind:class="{'is-invalid':isInvalidPassword}"
                 class="form-control form-control-lg"
                 placeholder="Password"
                 name="password"
               >
-              <div v-if="isInvalidPassword" class="invalid-feedback">{{this.state.errors.password}}</div>
+              <div v-if="isInvalidPassword" class="invalid-feedback">{{this.AUTH_ERROR_PW}}</div>
             </div>
             <div class="form-group">
               <input
-                v-model="state.password2"
+                v-model="formData.password2"
                 type="password"
                 v-bind:class="{'is-invalid':isInvalidPassword2}"
                 class="form-control form-control-lg"
                 placeholder="Confirm Password"
                 name="password2"
               >
-              <div class="invalid-feedback">{{this.state.errors.password2}}</div>
+              <div v-if="isInvalidPassword2" class="invalid-feedback">{{this.AUTH_ERROR_PW2}}</div>
             </div>
             <input type="submit" class="btn btn-info btn-block mt-4">
           </form>
@@ -67,47 +64,48 @@
 <script>
 import Axios from "axios";
 
+import { mapActions, mapGetters } from "vuex";
+import router from "@/router";
+
 export default {
   name: "register",
   data() {
     return {
-      state: {
+      formData: {
         name: "",
         email: "",
         password: "",
-        password2: "",
-        errors: {}
+        password2: ""
       }
     };
   },
   computed: {
+    ...mapGetters([
+      "AUTH_ERROR_NAME",
+      "AUTH_ERROR_EMAIL",
+      "AUTH_ERROR_PW",
+      "AUTH_ERROR_PW2"
+    ]),
     isInvalidName() {
-      if (this.state.errors) {
-        return this.state.errors.name !== undefined ? true : false;
-      }
+      return this.AUTH_ERROR_NAME !== undefined ? true : false;
     },
     isInvalidEmail() {
-      if (this.state.errors) {
-        return this.state.errors.email !== undefined ? true : false;
-      }
+      return this.AUTH_ERROR_EMAIL !== undefined ? true : false;
     },
     isInvalidPassword() {
-      if (this.state.errors) {
-        return this.state.errors.password !== undefined ? true : false;
-      }
+      return this.AUTH_ERROR_PW !== undefined ? true : false;
     },
     isInvalidPassword2() {
-      if (this.state.errors) {
-        return this.state.errors.password2 !== undefined ? true : false;
-      }
+      return this.AUTH_ERROR_PW2 !== undefined ? true : false;
     }
   },
   methods: {
-    setErrors(errors) {
-      this.state.errors = errors;
-    },
+    ...mapActions(["REGISTER_USER_REQUEST"]),
+    /***
+     *
+     */
     processForm(e) {
-      let { name, email, password, password2 } = this.state;
+      let { name, email, password, password2 } = this.formData;
 
       const newUser = {
         name,
@@ -115,13 +113,16 @@ export default {
         password,
         password2
       };
-      Axios.post("api/auth/register", newUser)
-        .then(res => {
-          console.log(res.data);
+
+      this.REGISTER_USER_REQUEST(newUser)
+        .then(result => {
+          if (result.success) {
+            router.push({
+              name: "login"
+            });
+          }
         })
-        .catch(err => {
-          this.setErrors(err.response.data);
-        });
+        .catch(err => {});
     }
   }
 };
