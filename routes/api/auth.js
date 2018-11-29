@@ -105,9 +105,12 @@ router.post("/login", (req, res) => {
           keys.secretOrKey,
           { expiresIn: 3600 },
           (err, token) => {
+            let expireAt = 3600 * 1000 + new Date().getTime();
             res.json({
               success: true,
-              token: "Bearer " + token
+              token: "Bearer " + token,
+              expires_in: 3600,
+              expires_at: expireAt
             });
           }
         );
