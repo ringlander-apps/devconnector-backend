@@ -24,6 +24,17 @@ export default {
         .catch(err => reject(err));
     });
   },
+  /**
+   *
+   * @param {*} token
+   */
+  setAuthToken(token) {
+    if (token) {
+      apiClient.defaults.headers.common["Authorization"] = token;
+    } else {
+      delete apiClient.defaults.headers.common["Authorization"];
+    }
+  },
   /************************* */
 
   /**
@@ -32,17 +43,28 @@ export default {
    */
   registerUser(userData) {
     return new Promise((resolve, reject) => {
-      // const options = {
-      //   method: "POST",
-      //   headers: { "content-type": "application/x-www-form-urlencoded" },
-      //   data: userData
-      // };
       apiClient
         .post("/auth/register", userData)
         .then(data => {
           resolve(data);
         })
         .catch(err => reject(err));
+    });
+  },
+  /**
+   *
+   * @param {*} userData
+   */
+  loginUser(userData) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .post("/auth/login", userData)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
     });
   }
 };
