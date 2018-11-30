@@ -14,11 +14,14 @@
         </ul>
 
         <ul class="navbar-nav ml-auto">
-          <li v-if="!user" class="nav-item">
-            <router-link class="nav-link" to="/register">Sign up</router-link>
+          <li class="nav-item">
+            <router-link v-if="!USER" class="nav-link" to="/register">Sign up</router-link>
           </li>
-          <li v-if="!isAuthenticated" class="nav-item">
+          <li v-if="!IS_AUTHENTICATED" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
+          </li>
+          <li v-if="IS_AUTHENTICATED" class="nav-item">
+            <button class="btn btn-link nav-link" @click="logout">Logout</button>
           </li>
         </ul>
       </div>
@@ -27,10 +30,17 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
-  computed: mapState(["isAuthenticated", "user"])
+  computed: mapGetters(["IS_AUTHENTICATED", "USER"]),
+  methods: {
+    logout() {
+      console.log("Hi");
+      this.LOGOUT_USER_REQUEST();
+    },
+    ...mapActions(["LOGOUT_USER_REQUEST"])
+  }
 };
 </script>
 
