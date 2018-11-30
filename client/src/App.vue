@@ -1,25 +1,18 @@
 <template>
   <div id="app">
-    <Navbar />
+    <Navbar/>
     <router-view/>
     <Footer/>
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-     -->
   </div>
 </template>
 <script>
 import Navbar from "@/components/layout/Navbar.vue";
 import Footer from "@/components/layout/Footer.vue";
-//import Landing from "@/components/layout/Landing.vue";
 
 export default {
   components: {
     Navbar,
     Footer
-    //Landing
   }
 };
 </script>
