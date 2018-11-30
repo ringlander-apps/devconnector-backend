@@ -8,22 +8,27 @@
           <form @submit.prevent="processLogin">
             <div class="form-group">
               <input
-                v-model="state.email"
+                v-model="formData.email"
                 type="email"
                 class="form-control form-control-lg"
                 placeholder="Email Address"
                 name="email"
+                v-bind:class="{'is-invalid':isInvalidEmail}"
               >
+              <div v-if="isInvalidEmail" class="invalid-feedback">{{this.LOGIN_ERROR_EMAIL}}</div>
             </div>
             <div class="form-group">
               <input
-                v-model="state.password"
+                v-model="formData.password"
                 type="password"
                 class="form-control form-control-lg"
                 placeholder="Password"
                 name="password"
+                v-bind:class="{'is-invalid':isInvalidPassword}"
               >
+              <div v-if="isInvalidPassword" class="invalid-feedback">{{this.LOGIN_ERROR_PW}}</div>
             </div>
+
             <input type="submit" class="btn btn-info btn-block mt-4">
           </form>
         </div>
@@ -33,26 +38,43 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "login",
   data() {
     return {
-      state: {
+      formData: {
         email: "",
-        password: "",
-        errors: {}
+        password: ""
       }
     };
   },
+  computed: {
+    ...mapGetters(["LOGIN_ERROR_EMAIL", "LOGIN_ERROR_PW"]),
+    isInvalidEmail() {
+      return this.LOGIN_ERROR_EMAIL !== undefined ? true : false;
+    },
+    isInvalidPassword() {
+      return this.LOGIN_ERROR_PW !== undefined ? true : false;
+    }
+  },
   methods: {
+    ...mapActions(["LOGIN_USER_REQUEST"]),
     processLogin(e) {
-      const { email, password } = this.state;
+      const { email, password } = this.formData;
 
       const loginUser = {
         email,
         password
       };
-      console.log(loginUser);
+      this.LOGIN_USER_REQUEST(loginUser)
+        .then(result => {
+          console.log(result);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };
