@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Navbar/>
-    <router-view/>
+    <transition name="fade" mode="out-in">
+      <router-view/>
+    </transition>
     <Footer/>
   </div>
 </template>
@@ -20,6 +22,15 @@ export default {
 <style>
 img {
   width: 100%;
+}
+.fade-enter-active {
+  transition-duration: 0.5s;
+  transition-timing-function: ease;
+  transition-property: opacity;
+}
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
 }
 
 .landing {
