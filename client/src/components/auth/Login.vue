@@ -39,6 +39,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import router from "@/router";
 
 export default {
   name: "login",
@@ -70,7 +71,9 @@ export default {
       };
       this.LOGIN_USER_REQUEST(loginUser)
         .then(result => {
-          console.log(result);
+          if (result.success) {
+            router.push({ name: "dashboard" });
+          }
         })
         .catch(err => {
           console.log(err);

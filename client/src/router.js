@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Landing from "@/components/layout/Landing.vue";
 import Login from "@/components/auth/Login.vue";
 import Register from "@/components/auth/Register.vue";
+import Dashboard from "@/views/Dashboard.vue";
 
 Vue.use(Router);
 
@@ -24,6 +25,11 @@ export default new Router({
       path: "/",
       name: "landing",
       component: Landing
+    },
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: Dashboard
     }
   ]
 });
