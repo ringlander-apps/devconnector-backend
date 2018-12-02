@@ -20,8 +20,17 @@
           <li v-if="!IS_AUTHENTICATED" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
           </li>
+
           <li v-if="IS_AUTHENTICATED" class="nav-item">
-            <button class="btn btn-link nav-link" @click="logout">Logout</button>
+            <div class="nav-link" @click="logout">
+              <img
+                class="rounded-circle"
+                style="width: 25px;margin-right:5px"
+                :src="this.USER.avatar"
+                alt
+                title="You must have a Gravatar connected to your email to display an image"
+              > Logout
+            </div>
           </li>
         </ul>
       </div>
@@ -31,13 +40,14 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import router from "@/router";
 
 export default {
   computed: mapGetters(["IS_AUTHENTICATED", "USER"]),
   methods: {
     logout() {
-      console.log("Hi");
       this.LOGOUT_USER_REQUEST();
+      router.push({ name: "landing" });
     },
     ...mapActions(["LOGOUT_USER_REQUEST"])
   }
@@ -45,4 +55,7 @@ export default {
 </script>
 
 <style scoped>
+.nav-item {
+  cursor: pointer;
+}
 </style>
