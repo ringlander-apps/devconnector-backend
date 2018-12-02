@@ -9,12 +9,8 @@
               class="lead"
             >Create a developer profile/portfolio, share posts and get help from other developers</p>
             <hr>
-            <router-link to="/register" class="btn btn-lg btn-info mr-2">Sign up</router-link>
-            <router-link
-              v-if="!this.IS_AUTHENTICATED"
-              to="/login"
-              class="btn btn-lg btn-light"
-            >Login</router-link>
+            <router-link v-if="!USER" to="/register" class="btn btn-lg btn-info mr-2">Sign up</router-link>
+            <router-link v-if="!IS_AUTHENTICATED" to="/login" class="btn btn-lg btn-light">Login</router-link>
           </div>
         </div>
       </div>
@@ -27,7 +23,16 @@ import { mapGetters, mapActions } from "vuex";
 import APIService from "@/services/APIService";
 export default {
   name: "landing",
-  computed: mapGetters(["USER, IS_AUTHENTICATED"]),
+  data() {
+    return {
+      isAuth: null
+    };
+  },
+
+  computed: {
+    ...mapGetters(["USER", "IS_AUTHENTICATED"])
+  },
+
   methods: {}
 };
 </script>
