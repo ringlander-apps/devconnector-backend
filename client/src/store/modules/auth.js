@@ -9,10 +9,10 @@ import jwt_decode from "jwt-decode";
 import isEmpty from "@/validation/is-empty";
 
 const state = {
-  isAuthenticated: !isEmpty(jwt_decode(localStorage.getItem("devcon-token"))),
-  user: jwt_decode(localStorage.getItem("devcon-token")),
-  accessToken: localStorage.getItem("devcon-token"),
-  expiresAt: localStorage.getItem("devcon-token-expires_at"),
+  isAuthenticated: !isEmpty(localStorage.getItem("devcon-token")),
+  user: isEmpty(localStorage.getItem("devcon-token"))
+    ? null
+    : jwt_decode(localStorage.getItem("devcon-token")),
 
   authErrors: {},
   loginErrors: {}
@@ -112,7 +112,10 @@ const actions = {
           //Commit mutation
           commit("SET_TOKEN_DATA", result.data);
           //Decode user information from the token
-          commit("SET_CURRENT_USER", jwt_decode(token));
+          if (token) {
+            commit("SET_CURRENT_USER", jwt_decode(token));
+          }
+
           commit("RESET_LOGIN_ERRORS");
           resolve({ status: 200, success: true });
         })
@@ -131,7 +134,6 @@ const actions = {
    * Set current user to null
    */
   [LOGOUT_USER_REQUEST]: ({ commit }) => {
-    console.log("Here");
     APIService.setAuthToken("");
     commit("SET_TOKEN_DATA", null);
     commit("SET_CURRENT_USER", null);
