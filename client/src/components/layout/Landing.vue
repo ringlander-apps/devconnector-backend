@@ -19,20 +19,18 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import APIService from "@/services/APIService";
+import { mapGetters } from "vuex";
+import router from "@/router";
 export default {
   name: "landing",
-  data() {
-    return {
-      isAuth: null
-    };
-  },
-
   computed: {
     ...mapGetters(["USER", "IS_AUTHENTICATED"])
   },
-
+  mounted() {
+    if (this.IS_AUTHENTICATED) {
+      router.push({ name: "dashboard" });
+    }
+  },
   methods: {}
 };
 </script>
