@@ -6,29 +6,28 @@
           <h1 class="display-4 text-center">Log In</h1>
           <p class="lead text-center">Sign in to your DevConnector account</p>
           <form @submit.prevent="processLogin">
-            <div class="form-group">
-              <input
-                v-model="formData.email"
-                type="email"
-                class="form-control form-control-lg"
-                placeholder="Email Address"
-                name="email"
-                v-bind:class="{'is-invalid':isInvalidEmail}"
-              >
-              <div v-if="isInvalidEmail" class="invalid-feedback">{{this.LOGIN_ERROR_EMAIL}}</div>
-            </div>
-            <div class="form-group">
-              <input
-                v-model="formData.password"
-                type="password"
-                class="form-control form-control-lg"
-                placeholder="Password"
-                name="password"
-                v-bind:class="{'is-invalid':isInvalidPassword}"
-              >
-              <div v-if="isInvalidPassword" class="invalid-feedback">{{this.LOGIN_ERROR_PW}}</div>
-            </div>
-
+            <TextFieldGroup
+              functional
+              :value="this.formData.email"
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              :error="this.LOGIN_ERROR_EMAIL"
+              @input="handleFormInput"
+              :disabled="false"
+              :class="['form-control','form-control-lg',isInvalidEmail?'is-invalid':'']"
+            />
+            <TextFieldGroup
+              functional
+              :value="this.formData.password"
+              type="password"
+              name="password"
+              placeholder="Password"
+              :error="this.LOGIN_ERROR_PW"
+              @input="handleFormInput"
+              :disabled="false"
+              :class="['form-control','form-control-lg',isInvalidPassword?'is-invalid':'']"
+            />
             <input type="submit" class="btn btn-info btn-block mt-4">
           </form>
         </div>
@@ -40,9 +39,12 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import router from "@/router";
-
+import TextFieldGroup from "@/components/common/TextFieldGroup";
 export default {
   name: "login",
+  components: {
+    TextFieldGroup
+  },
   data() {
     return {
       formData: {
@@ -51,8 +53,13 @@ export default {
       }
     };
   },
+  mounted() {
+    if (this.IS_AUTHENTICATED) {
+      router.push({ name: "dashboard" });
+    }
+  },
   computed: {
-    ...mapGetters(["LOGIN_ERROR_EMAIL", "LOGIN_ERROR_PW"]),
+    ...mapGetters(["LOGIN_ERROR_EMAIL", "LOGIN_ERROR_PW", "IS_AUTHENTICATED"]),
     isInvalidEmail() {
       return this.LOGIN_ERROR_EMAIL !== undefined ? true : false;
     },
@@ -64,7 +71,6 @@ export default {
     ...mapActions(["LOGIN_USER_REQUEST"]),
     processLogin(e) {
       const { email, password } = this.formData;
-
       const loginUser = {
         email,
         password
@@ -78,6 +84,12 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    /**
+     *
+     */
+    handleFormInput(element, value) {
+      this.formData[element.name] = value;
     }
   }
 };
