@@ -6,53 +6,50 @@
           <h1 class="display-4 text-center">Sign Up</h1>
           <p class="lead text-center">Create your DevConnector account</p>
           <form @submit.prevent="processForm">
-            <div class="form-group">
-              <input
-                v-model="formData.name"
-                type="text"
-                v-bind:class="{'is-invalid':isInvalidName}"
-                class="form-control form-control-lg"
-                placeholder="Name"
-                name="name"
-              >
-              <div v-if="isInvalidName" class="invalid-feedback">{{this.AUTH_ERROR_NAME}}</div>
-            </div>
-            <div class="form-group">
-              <input
-                v-model="formData.email"
-                type="email"
-                v-bind:class="{'is-invalid':isInvalidEmail}"
-                class="form-control form-control-lg"
-                placeholder="Email Address"
-                name="email"
-              >
-              <div v-if="isInvalidEmail" class="invalid-feedback">{{this.AUTH_ERROR_EMAIL}}</div>
-              <small
-                class="form-text text-muted"
-              >This site uses Gravatar so if you want a profile image, use a Gravatar email</small>
-            </div>
-            <div class="form-group">
-              <input
-                v-model="formData.password"
-                type="password"
-                v-bind:class="{'is-invalid':isInvalidPassword}"
-                class="form-control form-control-lg"
-                placeholder="Password"
-                name="password"
-              >
-              <div v-if="isInvalidPassword" class="invalid-feedback">{{this.AUTH_ERROR_PW}}</div>
-            </div>
-            <div class="form-group">
-              <input
-                v-model="formData.password2"
-                type="password"
-                v-bind:class="{'is-invalid':isInvalidPassword2}"
-                class="form-control form-control-lg"
-                placeholder="Confirm Password"
-                name="password2"
-              >
-              <div v-if="isInvalidPassword2" class="invalid-feedback">{{this.AUTH_ERROR_PW2}}</div>
-            </div>
+            <TextFieldGroup
+              functional
+              :value="this.formData.name"
+              name="name"
+              placeholder="Name"
+              :error="this.AUTH_ERROR_NAME"
+              @input="handleFormInput"
+              :disabled="false"
+              :class="['form-control','form-control-lg',isInvalidName?'is-invalid':'']"
+            />
+            <TextFieldGroup
+              functional
+              :value="this.formData.email"
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              :error="this.AUTH_ERROR_EMAIL"
+              :info="'This site uses Gravatar so if you want a profile image, use a Gravatar email'"
+              @input="handleFormInput"
+              :disabled="false"
+              :class="['form-control','form-control-lg',isInvalidEmail?'is-invalid':'']"
+            />
+            <TextFieldGroup
+              functional
+              :value="this.formData.password"
+              type="password"
+              name="password"
+              placeholder="Password"
+              :error="this.AUTH_ERROR_PW"
+              @input="handleFormInput"
+              :disabled="false"
+              :class="['form-control','form-control-lg',isInvalidPassword?'is-invalid':'']"
+            />
+            <TextFieldGroup
+              functional
+              :value="this.formData.password2"
+              type="password"
+              name="password2"
+              placeholder="Confirm Password"
+              :error="this.AUTH_ERROR_PW2"
+              @input="handleFormInput"
+              :disabled="false"
+              :class="['form-control','form-control-lg',isInvalidPassword2?'is-invalid':'']"
+            />
             <input type="submit" class="btn btn-info btn-block mt-4">
           </form>
         </div>
@@ -66,9 +63,13 @@ import Axios from "axios";
 
 import { mapActions, mapGetters } from "vuex";
 import router from "@/router";
+import TextFieldGroup from "@/components/common/TextFieldGroup";
 
 export default {
   name: "register",
+  components: {
+    TextFieldGroup
+  },
   data() {
     return {
       formData: {
@@ -84,7 +85,8 @@ export default {
       "AUTH_ERROR_NAME",
       "AUTH_ERROR_EMAIL",
       "AUTH_ERROR_PW",
-      "AUTH_ERROR_PW2"
+      "AUTH_ERROR_PW2",
+      "IS_AUTHENTICATED"
     ]),
     isInvalidName() {
       return this.AUTH_ERROR_NAME !== undefined ? true : false;
@@ -97,6 +99,11 @@ export default {
     },
     isInvalidPassword2() {
       return this.AUTH_ERROR_PW2 !== undefined ? true : false;
+    }
+  },
+  mounted() {
+    if (this.IS_AUTHENTICATED) {
+      router.push({ name: "dashboard" });
     }
   },
   methods: {
@@ -123,6 +130,9 @@ export default {
           }
         })
         .catch(err => {});
+    },
+    handleFormInput(element, value) {
+      this.formData[element.name] = value;
     }
   }
 };
