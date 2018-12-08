@@ -10,11 +10,30 @@
 <script>
 import Navbar from "@/components/layout/Navbar.vue";
 import Footer from "@/components/layout/Footer.vue";
-
+import { mapActions, mapGetters } from "vuex";
+import jwt_decode from "jwt-decode";
+import router from "@/router";
 export default {
   components: {
     Navbar,
     Footer
+  },
+  created() {
+    if (this.ACCESS_TOKEN) {
+      //check expire
+      const decoded = jwt_decode(this.ACCESS_TOKEN);
+      const currentTime = Date.now() / 1000;
+      if (decoded.exp < currentTime) {
+        this.LOGOUT_USER_REQUEST();
+        router.push({ name: "landing" });
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(["ACCESS_TOKEN"])
+  },
+  methods: {
+    ...mapActions(["LOGOUT_USER_REQUEST"])
   }
 };
 </script>
