@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
     <div class="container">
-      <router-link class="navbar-brand" to="/">DevConnector</router-link>
+      <router-link class="navbar-brand" :to="{name:'landing'}">DevConnector</router-link>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
         <span class="navbar-toggler-icon"></span>
       </button>
