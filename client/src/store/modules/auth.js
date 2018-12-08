@@ -13,13 +13,16 @@ const state = {
   user: isEmpty(localStorage.getItem("devcon-token"))
     ? null
     : jwt_decode(localStorage.getItem("devcon-token")),
-
+  accessToken: JSON.parse(localStorage.getItem("devcon-token")),
   authErrors: {},
   loginErrors: {}
 };
 const getters = {
   IS_AUTHENTICATED: state => {
     return state.isAuthenticated;
+  },
+  ACCESS_TOKEN: state => {
+    return state.accessToken;
   },
   USER: state => {
     return state.user;
