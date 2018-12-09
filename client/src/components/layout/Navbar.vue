@@ -47,9 +47,10 @@ export default {
   methods: {
     logout() {
       this.LOGOUT_USER_REQUEST();
+      this.CLEAR_PROFILE_REQUEST();
       router.push({ name: "landing" });
     },
-    ...mapActions(["LOGOUT_USER_REQUEST"])
+    ...mapActions(["LOGOUT_USER_REQUEST", "CLEAR_PROFILE_REQUEST"])
   }
 };
 </script>

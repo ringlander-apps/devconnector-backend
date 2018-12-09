@@ -25,6 +25,8 @@ export default {
       const currentTime = Date.now() / 1000;
       if (decoded.exp < currentTime) {
         this.LOGOUT_USER_REQUEST();
+        this.CLEAR_PROFILE_REQUEST();
+
         router.push({ name: "landing" });
       }
     }
@@ -33,7 +35,7 @@ export default {
     ...mapGetters(["ACCESS_TOKEN"])
   },
   methods: {
-    ...mapActions(["LOGOUT_USER_REQUEST"])
+    ...mapActions(["LOGOUT_USER_REQUEST", "CLEAR_PROFILE_REQUEST"])
   }
 };
 </script>

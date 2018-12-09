@@ -26,6 +26,18 @@ export default {
   },
   /**
    *
+   */
+  getProfile() {
+    return new Promise((resolve, reject) => {
+      console.log(apiClient);
+      apiClient
+        .get("/profile")
+        .then(response => resolve(response.data))
+        .catch(err => reject(err));
+    });
+  },
+  /**
+   *
    * @param {*} token
    */
   setAuthToken(token) {

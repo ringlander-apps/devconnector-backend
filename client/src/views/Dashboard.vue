@@ -100,7 +100,17 @@ export default {
     name() {
       return this.data;
     },
-    ...mapGetters(["USER"])
+    ...mapGetters(["USER", "PROFILE"])
+  },
+  methods: {
+    ...mapActions(["GET_PROFILE_REQUEST"])
+  },
+  created() {
+    this.GET_PROFILE_REQUEST()
+      .then(result => {
+        console.log(result);
+      })
+      .catch(err => {});
   }
 };
 </script>
