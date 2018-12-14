@@ -4,82 +4,32 @@
       <div class="row">
         <div class="col-md-12">
           <h1 class="display-4">Dashboard</h1>
-          <p class="lead text-muted">Welcome {{this.USER.name}}</p>
-          <!-- Dashboard Actions -->
-          <div class="btn-group mb-4" role="group">
-            <a href="edit-profile.html" class="btn btn-light">
-              <i class="fas fa-user-circle text-info mr-1"></i> Edit Profile
-            </a>
-            <a href="add-experience.html" class="btn btn-light">
-              <i class="fab fa-black-tie text-info mr-1"></i>
-              Add Experience
-            </a>
-            <a href="add-education.html" class="btn btn-light">
-              <i class="fas fa-graduation-cap text-info mr-1"></i>
-              Add Education
-            </a>
+          <div v-if="!PROFILE || LOADING">
+            <Spinner/>
           </div>
+          <div v-else>
+            <div v-if="Object.keys(PROFILE).length>0">
+              <p class="lead text-muted">Welcome
+                <router-link
+                  :to="{name:'profile',params:{handle:PROFILE.handle}}"
+                >{{this.USER.name}}</router-link>
+              </p>
+              <ProfileActions/>
+              <div style="margin-bottom:60px">
+                <button
+                  @click="handleDeleteProfile"
+                  type="button"
+                  class="btn btn-danger"
+                >Delete My Account</button>
+              </div>
+            </div>
 
-          <!-- Experience -->
-          <div>
-            <h4 class="mb-2">Experience Credentials</h4>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Company</th>
-                  <th>Title</th>
-                  <th>Years</th>
-                  <th/>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Tech Guy Web Solutions</td>
-                  <td>Senior Developer</td>
-                  <td>02-03-2009 - 01-02-2014</td>
-                  <td>
-                    <button class="btn btn-danger">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Traversy Media</td>
-                  <td>Instructor & Developer</td>
-                  <td>02-03-2015 - Now</td>
-                  <td>
-                    <button class="btn btn-danger">Delete</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Education -->
-          <div>
-            <h4 class="mb-2">Education Credentials</h4>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>School</th>
-                  <th>Degree</th>
-                  <th>Years</th>
-                  <th/>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Northern Essex</td>
-                  <td>Associates</td>
-                  <td>02-03-2007 - 01-02-2009</td>
-                  <td>
-                    <button class="btn btn-danger">Delete</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div style="margin-bottom: 60px;">
-            <button class="btn btn-danger">Delete My Account</button>
+            <div v-else>
+              <!-- USER is logged in but no profile is created-->
+              <p class="lead text-muted">Welcome {{this.USER.name}}</p>
+              <p>You have not setup a profile yet, please add some info</p>
+              <router-link :to="{name:'create-profile'}" class="btn btn-lg btn-info">Create Profile</router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -89,21 +39,54 @@
 
 <script>
 import ProfileActions from "@/components/profile/ProfileActions";
+import Spinner from "@/components/common/Spinner";
 
 import { mapActions, mapGetters } from "vuex";
 
+import router from "@/router";
+
 export default {
   name: "dashboard",
-  components: {},
+  components: {
+    Spinner,
+    ProfileActions
+  },
 
   computed: {
     name() {
       return this.data;
     },
-    ...mapGetters(["USER", "PROFILE"])
+    ...mapGetters(["USER", "PROFILE", "LOADING"])
   },
   methods: {
-    ...mapActions(["GET_PROFILE_REQUEST"])
+    ...mapActions([
+      "GET_PROFILE_REQUEST",
+      "DELETE_PROFILE_REQUEST",
+      "LOGOUT_USER_REQUEST",
+      "CLEAR_PROFILE_REQUEST"
+    ]),
+    /**
+     *
+     */
+    handleDeleteProfile() {
+      if (
+        confirm(
+          "Are you sure you want to delete current profile/user? This can NOT be undone"
+        )
+      ) {
+        this.DELETE_PROFILE_REQUEST()
+          .then(response => {
+            if ((response.status = 200)) {
+              this.LOGOUT_USER_REQUEST();
+              this.CLEAR_PROFILE_REQUEST();
+              router.push({ name: "login" });
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    }
   },
   created() {
     this.GET_PROFILE_REQUEST()
