@@ -19,7 +19,7 @@ export default {
       apiClient
         .get("/profile/all")
         .then(response => {
-          resolve(response.data);
+          resolve(response);
         })
         .catch(err => reject(err));
     });
@@ -29,10 +29,34 @@ export default {
    */
   getProfile() {
     return new Promise((resolve, reject) => {
-      console.log(apiClient);
       apiClient
         .get("/profile")
-        .then(response => resolve(response.data))
+        .then(response => resolve(response))
+        .catch(err => reject(err));
+    });
+  },
+  /**
+   *
+   * @param {*} userProfile
+   */
+  createProfile(userProfile) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .post("/profile", userProfile)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => reject(err));
+    });
+  },
+  /**
+   *
+   */
+  deleteProfile() {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .delete("/profile")
+        .then(response => resolve(response))
         .catch(err => reject(err));
     });
   },
