@@ -20,6 +20,9 @@
           <li v-if="!IS_AUTHENTICATED" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
           </li>
+          <li v-if="IS_AUTHENTICATED" class="nav-item">
+            <router-link class="nav-link" :to="{name:'dashboard'}">Dashboard</router-link>
+          </li>
 
           <li v-if="IS_AUTHENTICATED" class="nav-item">
             <div class="nav-link" @click="logout">
