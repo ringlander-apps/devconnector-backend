@@ -5,7 +5,7 @@ export default {
     let element = (
       <div>
         <div class="btn-group mb-4" role="group">
-          <router-link to="/landing" class="btn btn-light">
+          <router-link to="/edit-profile" class="btn btn-light">
             <i class="fas fa-user-circle text-info mr-1" />
             Edit Profile
           </router-link>
