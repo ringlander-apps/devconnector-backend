@@ -6,6 +6,7 @@ import Register from "@/components/auth/Register.vue";
 import Dashboard from "@/views/Dashboard.vue";
 import CreateProfile from "@/components/profile/add/CreateProfile.vue";
 import Profile from "@/views/Profile";
+import EditProfile from "@/components/profile/edit/EditProfile";
 
 import store from "./store/index";
 import jwt_decode from "jwt-decode";
@@ -44,6 +45,14 @@ const router = new Router({
       path: "/create-profile",
       name: "create-profile",
       component: CreateProfile,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/edit-profile",
+      name: "edit-profile",
+      component: EditProfile,
       meta: {
         requiresAuth: true
       }
