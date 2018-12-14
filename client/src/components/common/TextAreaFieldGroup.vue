@@ -24,7 +24,8 @@ export default {
           name={data.attrs.name}
           class={data.class}
           placeholder={data.attrs.placeholder}
-          onChange={e => onChange(e, e.target.value)}
+          onChange={e => onChange(e.target, e.target.value)}
+          value={props.text}
         />
         <small class="form-text text-muted">{props.info}</small>
       </div>

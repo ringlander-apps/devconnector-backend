@@ -21,7 +21,6 @@ export default {
   onSelected(event) {},
   render(h, { data, props, children }) {
     const onSelected = data.on["change"];
-
     let selectOptions = props.options.map(option => {
       return (
         <option key={option.label} value={option.value}>
@@ -34,7 +33,8 @@ export default {
         <select
           name={data.attrs.name}
           class={data.class}
-          onChange={e => onSelected(e, e.target.value)}
+          onChange={e => onSelected(e.target, e.target.value)}
+          value={props.value}
         >
           {selectOptions}
         </select>

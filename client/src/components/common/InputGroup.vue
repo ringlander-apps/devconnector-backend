@@ -34,7 +34,7 @@ export default {
           placeholder={data.attrs.placeholder}
           type={data.attrs.type}
           value={props.value}
-          onChange={e => onChange(e, e.target.value)}
+          onInput={e => onChange(e.target, e.target.value)}
         />
         {props.error && <div class="invalid-feedback">{props.error}</div>}
       </div>
