@@ -7,6 +7,8 @@ import Dashboard from "@/views/Dashboard.vue";
 import CreateProfile from "@/components/profile/add/CreateProfile.vue";
 import Profile from "@/views/Profile";
 import EditProfile from "@/components/profile/edit/EditProfile";
+import AddEducation from "@/components/profile/add/AddEducation";
+import AddExperience from "@/components/profile/add/AddExperience";
 
 import store from "./store/index";
 import jwt_decode from "jwt-decode";
@@ -45,6 +47,22 @@ const router = new Router({
       path: "/create-profile",
       name: "create-profile",
       component: CreateProfile,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/add-education",
+      name: "add-education",
+      component: AddEducation,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/add-experience",
+      name: "add-experience",
+      component: AddExperience,
       meta: {
         requiresAuth: true
       }
