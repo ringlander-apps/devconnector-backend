@@ -304,7 +304,7 @@ router.post(
           const edEdu = {
             school: req.body.school,
             degree: req.body.degree,
-            fieldofstudy: req.body.fieldofstudy,
+            fieldofstudy: req.body.fieldOfStudy,
             from: req.body.from,
             to: req.body.to,
             current: req.body.current,
@@ -401,7 +401,7 @@ router.post(
           const newEdu = {
             school: req.body.school,
             degree: req.body.degree,
-            fieldofstudy: req.body.fieldofstudy,
+            fieldofstudy: req.body.fieldOfStudy,
             from: req.body.from,
             to: req.body.to,
             current: req.body.current,
