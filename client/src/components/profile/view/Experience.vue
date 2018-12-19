@@ -15,8 +15,9 @@
           <td>{{exp.company}}</td>
           <td>{{exp.title}}</td>
           <td>{{exp.from|formattedDate}} - {{exp.to|formattedDate}}</td>
-          <td>
-            <button class="btn btn-danger">Delete</button>
+          <td class="btn-wrapper">
+            <button type="button" @click="handleDelete(exp._id)" class="btn btn-danger">Delete</button>
+            <button id="editButton" class="btn btn-info">Edit</button>
           </td>
         </tr>
       </tbody>
@@ -26,6 +27,8 @@
 
 <script>
 import FormattedDate from "@/filters/FormattedDate";
+import { mapActions } from "vuex";
+
 export default {
   name: "experience",
   props: {
@@ -40,9 +43,29 @@ export default {
   data() {
     return {};
   },
-  created() {}
+  created() {},
+  methods: {
+    /**
+     *
+     */
+    handleDelete(id) {
+      this.DELETE_EXPERIENCE_REQUEST(id)
+        .then(response => {
+          if (response.status === 200) {
+            this.GET_PROFILE_REQUEST();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    ...mapActions(["DELETE_EXPERIENCE_REQUEST", "GET_PROFILE_REQUEST"])
+  }
 };
 </script>
 
 <style scoped>
+#editButton {
+  margin-left: 10px;
+}
 </style>
