@@ -3,7 +3,12 @@ import {
   GET_PROFILES_REQUEST,
   CLEAR_PROFILE_REQUEST,
   CREATE_PROFILE_REQUEST,
-  DELETE_PROFILE_REQUEST
+  DELETE_PROFILE_REQUEST,
+  UPDATE_PROFILE_REQUEST,
+  ADD_EXPERIENCE_REQUEST,
+  ADD_EDUCATION_REQUEST,
+  DELETE_EDUCATION_REQUEST,
+  DELETE_EXPERIENCE_REQUEST
 } from "../actions/profile";
 import APIService from "@/services/APIService";
 
@@ -12,7 +17,9 @@ const state = {
   profiles: null,
   loading: false,
   profileErrors: {},
-  socialErrors: {}
+  socialErrors: {},
+  experienceErrors: {},
+  educationErrors: {}
 };
 const getters = {
   PROFILE: state => {
@@ -23,6 +30,34 @@ const getters = {
   },
   LOADING: state => {
     return state.loading;
+  },
+  EDUCATION_ERROR_FOS: state => {
+    const { fieldOfStudy } = state.educationErrors;
+    return fieldOfStudy !== "" ? fieldOfStudy : "";
+  },
+  EDUCATION_ERROR_SCHOOL: state => {
+    const { school } = state.educationErrors;
+    return school !== "" ? school : "";
+  },
+  EDUCATION_ERROR_DEGREE: state => {
+    const { degree } = state.educationErrors;
+    return degree !== "" ? degree : "";
+  },
+  EDUCATION_ERROR_FROM: state => {
+    const { from } = state.educationErrors;
+    return from !== "" ? from : "";
+  },
+  EXPERIENCE_ERROR_TITLE: state => {
+    const { title } = state.experienceErrors;
+    return title !== "" ? title : "";
+  },
+  EXPERIENCE_ERROR_COMPANY: state => {
+    const { company } = state.experienceErrors;
+    return company !== "" ? company : "";
+  },
+  EXPERIENCE_ERROR_FROM: state => {
+    const { from } = state.experienceErrors;
+    return from !== "" ? from : "";
   },
   PROFILE_ERROR_HANDLE: state => {
     const { handle } = state.profileErrors;
@@ -84,11 +119,74 @@ const mutations = {
   },
   RESET_PROFILE_ERRORS: state => {
     state.profileErrors = {};
+  },
+  SET_EXPERIENCE_ERRORS: (state, payload) => {
+    state.experienceErrors = payload;
+  },
+  RESET_EXPERIENCE_ERRORS: state => {
+    state.experienceErrors = {};
+  },
+  SET_EDUCATION_ERRORS: (state, payload) => {
+    state.educationErrors = payload;
+  },
+  RESET_EDUCATION_ERRORS: state => {
+    state.educationErrors = {};
   }
 };
 const actions = {
+  [DELETE_EDUCATION_REQUEST]: ({ commit }, educationId) => {
+    return new Promise((resolve, reject) => {});
+  },
+  [ADD_EDUCATION_REQUEST]: ({ commit }, userEducation) => {
+    return new Promise((resolve, reject) => {
+      commit("RESET_EDUCATION_ERRORS");
+      commit("SET_LOADING", true);
+      APIService.addEducation(userEducation)
+        .then(response => {
+          resolve({ status: 200, success: true });
+        })
+        .catch(err => {
+          commit("SET_EDUCATION_ERRORS", err.response.data);
+          reject({ status: 400, success: false });
+        });
+      commit("SET_LOADING", false);
+    });
+  },
+  [ADD_EXPERIENCE_REQUEST]: ({ commit }, userExperience) => {
+    return new Promise((resolve, reject) => {
+      commit("RESET_EXPERIENCE_ERRORS");
+      commit("SET_LOADING", true);
+      APIService.addExperience(userExperience)
+        .then(response => {
+          resolve({ status: 200, success: true });
+        })
+        .catch(err => {
+          commit("SET_EXPERIENCE_ERRORS", err.response.data);
+          reject({ status: 400, success: false });
+        });
+      commit("SET_LOADING", false);
+    });
+  },
+
+  [UPDATE_PROFILE_REQUEST]: ({ commit }, userProfile) => {
+    return new Promise((resolve, reject) => {
+      commit("RESET_PROFILE_ERRORS");
+      commit("SET_LOADING", true);
+      APIService.updateProfile(userProfile)
+        .then(response => {
+          commit("SET_CURRENT_PROFILE", response.data);
+          resolve({ status: 200, success: true });
+        })
+        .catch(err => {
+          commit("SET_PROFILE_ERRORS", err.response.data);
+          reject({ status: 400, success: false });
+        });
+      commit("SET_LOADING", false);
+    });
+  },
   [CREATE_PROFILE_REQUEST]: ({ commit }, userProfile) => {
     return new Promise((resolve, reject) => {
+      commit("RESET_PROFILE_ERRORS");
       commit("SET_LOADING", true);
       APIService.createProfile(userProfile)
         .then(response => {
@@ -100,7 +198,6 @@ const actions = {
           reject({ status: 400, success: false });
         });
       commit("SET_LOADING", false);
-      commit("RESET_PROFILE_ERRORS");
     });
   },
   [DELETE_PROFILE_REQUEST]: ({ commit }) => {
