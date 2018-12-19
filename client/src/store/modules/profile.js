@@ -134,9 +134,27 @@ const mutations = {
   }
 };
 const actions = {
+  /**
+   *
+   */
   [DELETE_EDUCATION_REQUEST]: ({ commit }, educationId) => {
-    return new Promise((resolve, reject) => {});
+    return new Promise((resolve, reject) => {
+      commit("RESET_EDUCATION_ERRORS");
+      commit("SET_LOADING", true);
+      APIService.deleteEducation(educationId)
+        .then(response => {
+          resolve({ status: 200, success: true });
+        })
+        .catch(err => {
+          commit("SET_EDUCATION_ERRORS", err.response.data);
+          reject({ status: 400, success: false });
+        });
+      commit("SET_LOADING", false);
+    });
   },
+  /**
+   *
+   */
   [ADD_EDUCATION_REQUEST]: ({ commit }, userEducation) => {
     return new Promise((resolve, reject) => {
       commit("RESET_EDUCATION_ERRORS");
@@ -157,6 +175,21 @@ const actions = {
       commit("RESET_EXPERIENCE_ERRORS");
       commit("SET_LOADING", true);
       APIService.addExperience(userExperience)
+        .then(response => {
+          resolve({ status: 200, success: true });
+        })
+        .catch(err => {
+          commit("SET_EXPERIENCE_ERRORS", err.response.data);
+          reject({ status: 400, success: false });
+        });
+      commit("SET_LOADING", false);
+    });
+  },
+  [DELETE_EXPERIENCE_REQUEST]: ({ commit }, expId) => {
+    return new Promise((resolve, reject) => {
+      commit("RESET_EXPERIENCE_ERRORS");
+      commit("SET_LOADING", true);
+      APIService.deleteExperience(expId)
         .then(response => {
           resolve({ status: 200, success: true });
         })
