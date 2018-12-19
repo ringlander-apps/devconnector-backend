@@ -44,7 +44,17 @@ export default {
     formattedDate: FormattedDate.formattedDate
   },
   methods: {
-    handleDelete(id) {},
+    handleDelete(id) {
+      this.DELETE_EDUCATION_REQUEST(id)
+        .then(result => {
+          if (result.status === 200) {
+            console.log(`EDUCATION deleted`);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     ...mapActions(["DELETE_EDUCATION_REQUEST"])
   }
 };
