@@ -15,6 +15,9 @@
                 >{{this.USER.name}}</router-link>
               </p>
               <ProfileActions/>
+              <Experience v-bind:experience="this.PROFILE.experience"/>
+              <Education v-bind:education="this.PROFILE.education"/>
+
               <div style="margin-bottom:60px">
                 <button
                   @click="handleDeleteProfile"
@@ -39,6 +42,8 @@
 
 <script>
 import ProfileActions from "@/components/profile/ProfileActions";
+import Experience from "@/components/profile/view/Experience";
+import Education from "@/components/profile/view/Education";
 import Spinner from "@/components/common/Spinner";
 
 import { mapActions, mapGetters } from "vuex";
@@ -49,7 +54,9 @@ export default {
   name: "dashboard",
   components: {
     Spinner,
-    ProfileActions
+    ProfileActions,
+    Experience,
+    Education
   },
 
   computed: {
