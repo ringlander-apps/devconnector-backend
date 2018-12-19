@@ -9,6 +9,7 @@ module.exports = function validateEducationInput(data) {
   //Assign an empty string if its really empty(null, undefined etc)
   data.school = !isEmpty(data.school) ? data.school : "";
   data.degree = !isEmpty(data.degree) ? data.degree : "";
+  data.fieldOfStudy = !isEmpty(data.fieldOfStudy) ? data.fieldOfStudy : "";
   data.from = !isEmpty(data.from) ? data.from : "";
 
   if (validator.isEmpty(data.school)) {
@@ -16,6 +17,9 @@ module.exports = function validateEducationInput(data) {
   }
   if (validator.isEmpty(data.degree)) {
     errors.degree = "Degree field is required";
+  }
+  if (validator.isEmpty(data.fieldOfStudy)) {
+    errors.fieldOfStudy = "Field of study field is required";
   }
   if (validator.isEmpty(data.from)) {
     errors.from = "From date is required";
