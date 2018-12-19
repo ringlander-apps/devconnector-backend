@@ -16,7 +16,7 @@
           <td>{{edu.degree}}</td>
           <td>{{edu.from|formattedDate}} - {{edu.to|formattedDate}}</td>
           <td class="btn-wrapper">
-            <button @click="handleDelete(edu._id)" class="btn btn-danger">Delete</button>
+            <button type="button" @click="handleDelete(edu._id)" class="btn btn-danger">Delete</button>
             <button id="editButton" class="btn btn-info">Edit</button>
           </td>
         </tr>
@@ -27,7 +27,6 @@
 
 <script>
 import FormattedDate from "@/filters/FormattedDate";
-
 import { mapActions } from "vuex";
 
 export default {
@@ -48,14 +47,14 @@ export default {
       this.DELETE_EDUCATION_REQUEST(id)
         .then(result => {
           if (result.status === 200) {
-            console.log(`EDUCATION deleted`);
+            this.GET_PROFILE_REQUEST();
           }
         })
         .catch(err => {
           console.log(err);
         });
     },
-    ...mapActions(["DELETE_EDUCATION_REQUEST"])
+    ...mapActions(["DELETE_EDUCATION_REQUEST", "GET_PROFILE_REQUEST"])
   }
 };
 </script>
