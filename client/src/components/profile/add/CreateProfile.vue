@@ -23,8 +23,8 @@
               functional
               :value="this.formData.status"
               :options="this.selectOptions"
-              @change="handleSelect"
-              name="bio"
+              @change="handleFormInput"
+              name="status"
               :error="this.PROFILE_ERROR_STATUS"
               :info="`Give us an idea of where you are at in your career`"
               :class="['form-control','form-control-lg',isInvalidStatus?'is-invalid':'']"
@@ -162,7 +162,7 @@
                 :error="this.PROFILE_ERROR_INSTAGRAM"
               />
             </div>
-            <input type="submit" class="btn btn-info btn-block mt-4">
+            <input type="submit" value="Create Profile" class="btn btn-info btn-block mt-4">
           </form>
         </div>
       </div>
