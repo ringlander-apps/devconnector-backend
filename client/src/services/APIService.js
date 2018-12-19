@@ -51,6 +51,22 @@ export default {
   },
   /**
    *
+   * @param {*} userProfile
+   */
+  updateProfile(userProfile) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .post("/profile", userProfile)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  /**
+   *
    */
   deleteProfile() {
     return new Promise((resolve, reject) => {
@@ -58,6 +74,104 @@ export default {
         .delete("/profile")
         .then(response => resolve(response))
         .catch(err => reject(err));
+    });
+  },
+  /**
+   *
+   * @param {*} education
+   */
+  addEducation(education) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .post("/profile/education", education)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  /**
+   *
+   * @param {*} educationId
+   */
+  deleteEducation(educationId) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .delete(`/profile/education/${educationId}`)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  /**
+   *
+   * @param {*} educationId
+   * @param {*} education
+   */
+  updateEducation(educationId, education) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .post(`/profile/education/${educationId}`, education)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  /**
+   *
+   * @param {*} experience
+   */
+  addExperience(experience) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .post("/profile/experience", experience)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  /**
+   *
+   * @param {*} experienceId
+   */
+  deleteExperience(experienceId) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .delete(`/profile/experience/${experienceId}`)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  /**
+   *
+   * @param {*} experienceId
+   * @param {*} experience
+   */
+  updateExperience(experienceId, experience) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .post(`/profile/experience/${experienceId}`, experience)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
     });
   },
   /**
