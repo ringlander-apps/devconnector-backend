@@ -9,14 +9,14 @@ export default {
             <i class="fas fa-user-circle text-info mr-1" />
             Edit Profile
           </router-link>
-          <a href="add-experience.html" class="btn btn-light">
+          <router-link to="/add-experience" class="btn btn-light">
             <i class="fab fa-black-tie text-info mr-1" />
             Add Experience
-          </a>
-          <a href="add-education.html" class="btn btn-light">
+          </router-link>
+          <router-link to="/add-education" class="btn btn-light">
             <i class="fas fa-graduation-cap text-info mr-1" />
             Add Education
-          </a>
+          </router-link>
         </div>
       </div>
     );
