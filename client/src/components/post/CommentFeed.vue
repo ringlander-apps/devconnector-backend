@@ -1,6 +1,11 @@
 <template>
   <div class="comments">
-    <CommentCard v-for="comment in comments" :key="comment._id" :comment="comment"/>
+    <CommentCard
+      v-for="comment in comments"
+      :key="comment._id"
+      :comment="comment"
+      :postID="postID"
+    />
   </div>
 </template>
 
@@ -14,6 +19,10 @@ export default {
     },
     comments: {
       type: Array
+    },
+    postID: {
+      type: String,
+      required: true
     }
   },
   components: {
