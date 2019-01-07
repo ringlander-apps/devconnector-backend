@@ -83,13 +83,33 @@ export default {
         });
     });
   },
-
+  /**
+   *
+   * @param {*} postId
+   * @param {*} comment
+   */
   addComment(postId, comment) {
-    console.log(postId);
     return new Promise((resolve, reject) => {
       apiClient
         .post(`/posts/${postId}/comment`, comment)
         .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  /**
+   *
+   * @param {*} postID
+   * @param {*} commentID
+   */
+  deleteComment(postID, commentID) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .delete(`/posts/${postID}/comment/${commentID}`)
+        .then(respoense => {
           resolve(response);
         })
         .catch(err => {
