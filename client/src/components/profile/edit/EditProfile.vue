@@ -333,21 +333,25 @@ export default {
         ? profile.githubusername
         : "";
       this.formData.bio = !isEmpty(profile.bio) ? profile.bio : "";
-      this.formData.twitter = !isEmpty(profile.social.twitter)
-        ? profile.social.twitter
-        : "";
-      this.formData.facebook = !isEmpty(profile.social.facebook)
-        ? profile.facebook
-        : "";
-      this.formData.instagram = !isEmpty(profile.social.instagram)
-        ? profile.social.instagram
-        : "";
-      this.formData.youtube = !isEmpty(profile.social.youtube)
-        ? profile.social.youtube
-        : "";
-      this.formData.linkedin = !isEmpty(profile.social.linkedin)
-        ? profile.social.linkedin
-        : "";
+
+      if (profile.social !== undefined) {
+        this.formData.twitter = !isEmpty(profile.social.twitter)
+          ? profile.social.twitter
+          : "";
+        this.formData.facebook = !isEmpty(profile.social.facebook)
+          ? profile.facebook
+          : "";
+        this.formData.instagram = !isEmpty(profile.social.instagram)
+          ? profile.social.instagram
+          : "";
+        this.formData.youtube = !isEmpty(profile.social.youtube)
+          ? profile.social.youtube
+          : "";
+        this.formData.linkedin = !isEmpty(profile.social.linkedin)
+          ? profile.social.linkedin
+          : "";
+      }
+
       this.formData.skills = skillsCSV;
     },
     handleFormInput(element, value) {
