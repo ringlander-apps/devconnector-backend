@@ -222,9 +222,15 @@ const actions = {
       commit("SET_POSTS_LOADING", true);
       APIService.addComment(postID, comment)
         .then(response => {
-          commit("ADD_COMMENT", comment);
-          commit("SET_POSTS_LOADING", false);
-          resolve(response.data);
+          dispatch("GET_POST_BY_ID_REQUEST", postID)
+            .then(result => {
+              commit("SET_POSTS_LOADING", false);
+              resolve(result);
+            })
+            .catch(err => {
+              commit("SET_POSTS_LOADING", false);
+              reject(err);
+            });
         })
         .catch(err => {
           commit("SET_COMMENT_ERRORS", err.response.data);
@@ -233,6 +239,31 @@ const actions = {
         });
     });
   },
+  [DELETE_COMMENT_REQUEST]: ({ commit, dispatch }, commentObject) => {
+    return new Promise((resolve, reject) => {
+      const { postID, commentID } = commentObject;
+      commit("RESET_COMMENT_ERRORS");
+      commit("SET_POSTS_LOADING", true);
+      APIService.deleteComment(postID, commentID)
+        .then(response => {
+          console.log(response.data);
+          dispatch("GET_POST_BY_ID_REQUEST", postID)
+            .then(result => {
+              commit("SET_POSTS_LOADING", false);
+              resolve(result);
+            })
+            .catch(err => {
+              commit("SET_COMMENT_ERRORS", err.response.data);
+              commit("SET_POSTS_LOADING", false);
+              reject(err.response.data);
+            });
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+
   [CLEAR_POSTS_REQUEST]: ({ commit }) => {
     commit("RESET_POST_ERRORS");
     commit("SET_POST", null);
