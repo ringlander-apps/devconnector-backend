@@ -27,7 +27,8 @@ export default {
           onChange={e => onChange(e.target, e.target.value)}
           value={props.text}
         />
-        <small class="form-text text-muted">{props.info}</small>
+        {props.info && <small class="form-text text-muted">{props.info}</small>}
+        {props.error && <div class="invalid-feedback">{props.error}</div>}
       </div>
     );
     return wrapperElement;
