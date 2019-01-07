@@ -11,7 +11,7 @@
             <div v-if="Object.keys(PROFILE).length>0">
               <p class="lead text-muted">Welcome
                 <router-link
-                  :to="{name:'profile',params:{handle:PROFILE.handle}}"
+                  :to="{name:'show-profile',params:{handle:PROFILE.handle}}"
                 >{{this.USER.name}}</router-link>
               </p>
               <ProfileActions/>
@@ -26,7 +26,6 @@
                 >Delete My Account</button>
               </div>
             </div>
-
             <div v-else>
               <!-- USER is logged in but no profile is created-->
               <p class="lead text-muted">Welcome {{this.USER.name}}</p>
