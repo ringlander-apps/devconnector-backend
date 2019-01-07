@@ -10,6 +10,93 @@ const apiClient = Axios.create({
 });
 
 export default {
+  /**
+   *
+   */
+  getPosts() {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .get("/posts")
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => reject(err));
+    });
+  },
+  /**
+   *
+   * @param {*} postID
+   */
+  getPostById(postID) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .get(`/posts/${postID}`)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  /**
+   *
+   * @param {*} post
+   */
+  createPost(post) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .post("/posts", post)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  /**
+   *
+   * @param {*} postId
+   */
+  deletePost(postId) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .delete(`/posts/${postId}`)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  likePost(postId, operation) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .post(`/posts/${postId}/${operation}`)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+
+  addComment(postId, comment) {
+    console.log(postId);
+    return new Promise((resolve, reject) => {
+      apiClient
+        .post(`/posts/${postId}/comment`, comment)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
   /**  PROFILE related methods  */
   /**
    *
@@ -33,6 +120,22 @@ export default {
         .get("/profile")
         .then(response => resolve(response))
         .catch(err => reject(err));
+    });
+  },
+  /**
+   *
+   * @param {*} handle
+   */
+  getProfileByHandle(handle) {
+    return new Promise((resolve, reject) => {
+      apiClient
+        .get(`/profile/handle/${handle}`)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
     });
   },
   /**
