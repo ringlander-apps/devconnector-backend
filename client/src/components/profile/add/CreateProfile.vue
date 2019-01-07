@@ -213,35 +213,35 @@ export default {
         },
         {
           label: "Developer",
-          value: 1
+          value: "Developer"
         },
         {
           label: "Junior Developer",
-          value: 2
+          value: "Junior Developer"
         },
         {
           label: "Senior Developer",
-          value: 3
+          value: "Senior Developer"
         },
         {
           label: "Manager",
-          value: 4
+          value: "Manager"
         },
         {
           label: "Student or Learning",
-          value: 5
+          value: "Student or Learning"
         },
         {
           label: "Instructor or Teacher",
-          value: 6
+          value: "Instructor or Teacher"
         },
         {
           label: "Intern",
-          value: 7
+          value: "Intern"
         },
         {
           label: "Other",
-          value: 8
+          value: "Other"
         }
       ]
     };
