@@ -21,7 +21,7 @@
           <div v-else>
             <PostCard v-if="this.POST" :showActions="false" :post="this.POST"/>
             <AddComment :postID="this.id"/>
-            <CommentFeed title="CommentFeed" :comments="this.POST.comments"/>
+            <CommentFeed title="CommentFeed" :comments="this.POST.comments" :postID="this.id"/>
           </div>
         </div>
       </div>
