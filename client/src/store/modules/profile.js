@@ -1,6 +1,7 @@
 import {
   GET_PROFILE_REQUEST,
   GET_PROFILES_REQUEST,
+  GET_PROFILE_BY_HANDLE_REQUEST,
   CLEAR_PROFILE_REQUEST,
   CREATE_PROFILE_REQUEST,
   DELETE_PROFILE_REQUEST,
@@ -102,10 +103,25 @@ const getters = {
   PROFILE_ERROR_STATUS: state => {
     const { status } = state.profileErrors;
     return status !== "" ? status : "";
+  },
+  PROFILE_ERROR_NOPROFILE: state => {
+    const { noprofiles } = state.profileErrors;
+    return noprofiles !== "" ? noprofiles : "";
   }
 };
 const mutations = {
   SET_CURRENT_PROFILE: (state, payload) => {
+    if (!payload === null) {
+      let experience = payload.experience.sort((a, b) => {
+        return b.from > a.from;
+      });
+      let education = payload.education.sort((a, b) => {
+        return b.from > a.from;
+      });
+      payload.experience = experience;
+      payload.education = education;
+    }
+
     state.profile = payload;
   },
   SET_PROFILES: (state, payload) => {
@@ -254,17 +270,31 @@ const actions = {
       commit("SET_LOADING", true);
       APIService.getProfile()
         .then(response => {
-          //SET CURRENT PROFILE
           commit("SET_CURRENT_PROFILE", response.data);
+          commit("SET_LOADING", false);
         })
         .catch(err => {
-          // console.log("Error here");
-          // if (err.response.status === 404) {
-          //   commit("SET_CURRENT_PROFILE", {});
-          // }
           commit("SET_CURRENT_PROFILE", {});
+          commit("SET_LOADING", false);
         });
-      commit("SET_LOADING", false);
+    });
+  },
+  [GET_PROFILE_BY_HANDLE_REQUEST]: ({ commit }, profileHandle) => {
+    return new Promise((resolve, reject) => {
+      commit("SET_LOADING", true);
+      APIService.getProfileByHandle(profileHandle)
+        .then(response => {
+          commit("SET_CURRENT_PROFILE", response.data);
+          commit("SET_LOADING", false);
+          resolve({ status: 200, success: true });
+        })
+        .catch(err => {
+          console.log(err);
+          commit("SET_CURRENT_PROFILE", {});
+          commit("SET_PROFILE_ERRORS", err.response.data);
+          commit("SET_LOADING", false);
+          reject({ status: 400, succes: false });
+        });
     });
   },
   /***
@@ -272,12 +302,30 @@ const actions = {
    */
   [CLEAR_PROFILE_REQUEST]: ({ commit }) => {
     commit("SET_CURRENT_PROFILE", null);
+    commit("SET_PROFILES", null);
     commit("SET_LOADING", false);
   },
   /***
    *
    */
-  [GET_PROFILES_REQUEST]: ({ commit }, payload) => {}
+  [GET_PROFILES_REQUEST]: ({ commit }) => {
+    return new Promise((resolve, reject) => {
+      commit("SET_LOADING", true);
+
+      APIService.getProfiles()
+        .then(response => {
+          commit("SET_PROFILES", response.data);
+          commit("SET_LOADING", false);
+          resolve({ status: 200, success: true });
+        })
+        .catch(err => {
+          commit("SET_PROFILES", null);
+          commit("SET_PROFILE_ERRORS", err.response.data);
+          commit("SET_LOADING", false);
+          reject({ status: 400, success: false });
+        });
+    });
+  }
 };
 export default {
   state,
