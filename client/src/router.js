@@ -4,14 +4,19 @@ import Landing from "@/components/layout/Landing.vue";
 import Login from "@/components/auth/Login.vue";
 import Register from "@/components/auth/Register.vue";
 import Dashboard from "@/views/Dashboard.vue";
+import NotFound from "@/views/NotFound.vue";
+
 import CreateProfile from "@/components/profile/add/CreateProfile.vue";
+import ProfileList from "@/views/ProfileList";
 import Profile from "@/views/Profile";
 import EditProfile from "@/components/profile/edit/EditProfile";
 import AddEducation from "@/components/profile/add/AddEducation";
 import AddExperience from "@/components/profile/add/AddExperience";
 
+import PostList from "@/views/PostList.vue";
+import Post from "@/views/Post.vue";
+
 import store from "./store/index";
-import jwt_decode from "jwt-decode";
 
 Vue.use(Router);
 
@@ -34,6 +39,23 @@ const router = new Router({
       path: "/",
       name: "landing",
       component: Landing
+    },
+    {
+      path: "/feed",
+      name: "post-list",
+      component: PostList,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/feed/post/:id",
+      name: "show-post",
+      component: Post,
+      props: true,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: "/dashboard",
@@ -77,12 +99,19 @@ const router = new Router({
     },
     {
       path: "/profile/:handle",
-      name: "profile",
+      name: "show-profile",
       component: Profile,
-      // meta: {
-      //   requiresAuth: true
-      // },
       props: true
+    },
+    {
+      path: "/profiles/",
+      name: "profile-list",
+      component: ProfileList
+    },
+    {
+      path: "/not-found",
+      name: "not-found",
+      component: NotFound
     }
   ]
 });
