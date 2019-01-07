@@ -19,13 +19,16 @@ export default {
     Footer
   },
   created() {
+    this.CLEAR_PROFILE_REQUEST();
     if (this.ACCESS_TOKEN) {
+      console.log("Refresh and token");
       //check expire
       const decoded = jwt_decode(this.ACCESS_TOKEN);
       const currentTime = Date.now() / 1000;
       if (decoded.exp < currentTime) {
         this.LOGOUT_USER_REQUEST();
         this.CLEAR_PROFILE_REQUEST();
+        this.CLEAR_POSTS_REQUEST();
 
         router.push({ name: "landing" });
       }
@@ -35,7 +38,11 @@ export default {
     ...mapGetters(["ACCESS_TOKEN"])
   },
   methods: {
-    ...mapActions(["LOGOUT_USER_REQUEST", "CLEAR_PROFILE_REQUEST"])
+    ...mapActions([
+      "LOGOUT_USER_REQUEST",
+      "CLEAR_PROFILE_REQUEST",
+      "CLEAR_POSTS_REQUEST"
+    ])
   }
 };
 </script>
