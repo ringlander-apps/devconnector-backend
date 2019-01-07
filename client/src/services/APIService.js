@@ -109,7 +109,7 @@ export default {
     return new Promise((resolve, reject) => {
       apiClient
         .delete(`/posts/${postID}/comment/${commentID}`)
-        .then(respoense => {
+        .then(response => {
           resolve(response);
         })
         .catch(err => {
