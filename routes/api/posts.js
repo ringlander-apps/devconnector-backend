@@ -9,6 +9,7 @@ const Post = require("../../models/Post");
 const Profile = require("../../models/Profile");
 //Load validation
 const validatePostInput = require("../../validation/post");
+const validateCommentInput = require("../../validation/comment");
 
 // @route   GET   api/posts/test
 // @desc    Tests Posts route
@@ -39,7 +40,7 @@ router.get("/:id", (req, res) => {
 });
 
 // @route   POST   api/posts/
-// @desc    Create Posts route
+// @desc    Create Post route
 // @access  Private
 router.post(
   "/",
@@ -124,8 +125,8 @@ router.post(
       Post.findById(req.params.id)
         .then(post => {
           if (
-            post.likes.filter(like => like.user.toString() === req.user.id) ===
-            0
+            post.likes.filter(like => like.user.toString() === req.user.id)
+              .length === 0
           ) {
             errors.notliked = "Can't unlike post without like";
             return res.status(400).json(errors);
@@ -155,7 +156,7 @@ router.post(
   "/:id/comment",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const { errors, isValid } = validatePostInput(req.body);
+    const { errors, isValid } = validateCommentInput(req.body);
 
     if (!isValid) {
       return res.status(400).json(errors);
